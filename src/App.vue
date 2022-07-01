@@ -1,0 +1,62 @@
+<template>
+  <div id="app">
+    <div class="header">
+      <!-- <router-link to="/login" class="btn">excel在线编辑</router-link>
+      <router-link to="/home" class="btn">左右滚动</router-link>
+      <router-link to="/page1" class="btn">excel在线编辑page1 </router-link>
+      <router-link to="/page2" class="btn">excel在线编辑page2</router-link>
+      <router-link to="/page3" class="btn">excel在线编辑page3</router-link>
+      <router-link to="/page4" class="btn">excel在线编辑page4</router-link>
+      <router-link to="/page5" class="btn">excel在线编辑page5</router-link>
+      <router-link to="/page6" class="btn">自定义表格组件</router-link>
+      <router-link to="/page7" class="btn">海波原始表格-跨页多选</router-link>
+      <router-link to="/page7-copy" class="btn">海波原始表格-展开行</router-link>
+      <router-link to="/page8" class="btn">大文件上传</router-link> -->
+      <router-link to="/page9" class="btn">商品种类</router-link>
+      <router-link to="/page10" class="btn">入库数量</router-link>
+      <router-link to="/page11" class="btn">出库数量</router-link>
+    </div>
+    <div class="content">
+      <router-view> </router-view>
+      <!-- <div class="left">侧边栏</div>
+      <div class="right"></div> -->
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+};
+</script>
+
+<style lang="less" scoped>
+#app {
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .btn {
+    margin-right: 10px;
+  }
+  .header {
+    box-sizing: border-box;
+    height: 50px;
+    border: 1px solid #ccc;
+  }
+  .content {
+    box-sizing: border-box;
+    height: calc(100vh-50px);
+    flex: 1;
+    display: flex;
+    .left {
+      width: 200px;
+      background: blueviolet;
+    }
+    .right {
+      flex: 1;
+    }
+  }
+}
+</style>
