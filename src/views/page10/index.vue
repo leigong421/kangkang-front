@@ -281,7 +281,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import  "../../styles/fms.scss";
+// @import  "../../styles/fms.scss";
 .bank-list {
   .h3-title {
     padding: 16px 0;

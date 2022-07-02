@@ -31,6 +31,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "./styles/table-page.scss";
 #app {
   box-sizing: border-box;
   height: 100vh;

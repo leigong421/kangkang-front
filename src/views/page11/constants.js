@@ -3,6 +3,19 @@ export const colConfig = [
     dragLocked: true, //锁住不让拖动
     switchDisabled: true, //禁用关闭
     switch: true, // 是否展示该列
+    slotHeaderName: "searchBuyCompany", // 表头插槽
+    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
+    searchKey: "buyCompany", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    attrs: {
+      label: "购货单位",
+      prop: "buyCompany",
+      align: "left",
+    },
+  },
+  {
+    dragLocked: true, //锁住不让拖动
+    switchDisabled: true, //禁用关闭
+    switch: true, // 是否展示该列
     slotHeaderName: "searchGoodName", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
     searchKey: "goodName", // /表头查询字段,用于配置查询的时候传递给后台的字段
@@ -58,12 +71,12 @@ export const colConfig = [
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchTotal", // 表头插槽
+    slotHeaderName: "searchDate", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "total", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "date", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
-      label: "入库日期",
-      prop: "total",
+      label: "购货日期",
+      prop: "date",
       align: "left",
     },
   },
@@ -78,66 +91,66 @@ export const colConfig = [
   },
 ];
 
-export const bankListRules = {
-  code: [
-    {
-      required: true,
-      message: "银行编码不能为空",
-      trigger: ["blur", "change"],
-    },
-  ],
-  name: [
-    {
-      required: true,
-      message: "银行名称不能为空",
-      trigger: ["blur", "change"],
-    },
-  ],
-  address: [
-    {
-      required: true,
-      message: "银行地址不能为空",
-      trigger: ["blur", "change"],
-    },
-  ],
-};
+// export const bankListRules = {
+//   code: [
+//     {
+//       required: true,
+//       message: "银行编码不能为空",
+//       trigger: ["blur", "change"],
+//     },
+//   ],
+//   name: [
+//     {
+//       required: true,
+//       message: "银行名称不能为空",
+//       trigger: ["blur", "change"],
+//     },
+//   ],
+//   address: [
+//     {
+//       required: true,
+//       message: "银行地址不能为空",
+//       trigger: ["blur", "change"],
+//     },
+//   ],
+// };
 
-export const formItemList = [
-  {
-    type: "select",
-    prop: "buyCompany",
-    label: "购货单位",
-    formDataKey: "buyCompany",
-  },
-  {
-    type: "select",
-    prop: "goodName",
-    label: "商品名称",
-    formDataKey: "goodName",
-  },
-  {
-    type: "select",
-    prop: "unit",
-    label: "单位",
-    formDataKey: "unit",
-  },
-  {
-    type: "input",
-    prop: "num",
-    label: "数量",
-    formDataKey: "num",
-  },
+// export const formItemList = [
+//   {
+//     type: "select",
+//     prop: "buyCompany",
+//     label: "购货单位",
+//     formDataKey: "buyCompany",
+//   },
+//   {
+//     type: "select",
+//     prop: "goodName",
+//     label: "商品名称",
+//     formDataKey: "goodName",
+//   },
+//   {
+//     type: "select",
+//     prop: "unit",
+//     label: "单位",
+//     formDataKey: "unit",
+//   },
+//   {
+//     type: "input",
+//     prop: "num",
+//     label: "数量",
+//     formDataKey: "num",
+//   },
 
-  {
-    type: "input",
-    prop: "price",
-    label: "单价",
-    formDataKey: "price",
-  },
-  {
-    type: "input",
-    prop: "sumPrice",
-    label: "金额",
-    formDataKey: "sumPrice",
-  },
-];
+//   {
+//     type: "input",
+//     prop: "price",
+//     label: "单价",
+//     formDataKey: "price",
+//   },
+//   {
+//     type: "input",
+//     prop: "sumPrice",
+//     label: "金额",
+//     formDataKey: "sumPrice",
+//   },
+// ];
