@@ -16,7 +16,7 @@
       <hb-table
         v-loading="loading"
         :colConfig="colConfig"
-        :tableData="initData.data"
+        :tableData="tableList"
         row-key="id"
         height="calc(100vh - 265px)"
         :selection="true"
@@ -41,17 +41,6 @@
           />
         </template>
 
-        <!-- 自定义表头列下的插槽 -->
-        <template slot="switchDelFlag" slot-scope="scope">
-          <el-switch
-            v-model="scope.row.delFlag"
-            :active-value="1"
-            :inactive-value="2"
-            @change="handleSwitchChange(scope.row, scope.row.swiftCode)"
-          >
-          </el-switch>
-        </template>
-
         <!--自定义表头列插槽----下的列内容插槽--------如:插槽'hbSetting'下展示操作项 -->
         <template slot="operation" slot-scope="scope">
           <hb-operate
@@ -62,7 +51,7 @@
         </template>
       </hb-table>
     </div>
-    <div class="fms-pagination">
+    <!-- <div class="fms-pagination">
       <pagination
         class="hb-pagination"
         :data="initData"
@@ -70,7 +59,7 @@
         @sizeChange="handleSizeChange"
         :isShowLayoutSizes="true"
       />
-    </div>
+    </div> -->
 
     <hb-dialog
       :visible.sync="bankDialogVisible"
@@ -98,18 +87,10 @@
 
 <script>
 const INIT_SEARCH = {
-  status: 1,
-  page: 0,
-  size: 10,
+  page: 1,
+  size: 20,
 };
-// import {
-//   bankInfoList,
-//   // bankInfoDel,
-//   uploadXlsUrl,
-//   changeBankListSwitch,
-//   bankInfoStore,
-// } from "@/api/fms.js";
-// import { TableBody, Pagination, Form } from "gggj_lib";
+
 import HbTable from "@/components/hb-table/index.vue";
 import Pagination from "@/components/hb-pagination/index.vue";
 import HbDialog from "@/components/hb-dialog/index.vue";
@@ -130,6 +111,7 @@ export default {
     HbOperate,
   },
   mixins: [tableMixins],
+  inject: ["frontUrl"],
   data() {
     return {
       colConfig,
@@ -148,39 +130,21 @@ export default {
         },
       ],
       //初始化数据
-      initData: {
-        page: 0,
-        size: 10,
-        data: [],
-      },
+      // initData: {
+      //   page: 0,
+      //   size: 10,
+      //   data: [],
+      // },
+      tableList: undefined,
       loading: false,
 
       bankDialogVisible: false,
-      bankDialogVisibleTitle: "新增银行信息",
+      bankDialogVisibleTitle: "新增商品种类",
       submitLoading: false,
-      formData: {
-        code: "",
-        name: "",
-        address: "",
-      },
+      formData: {},
     };
   },
   methods: {
-    async handleSwitchChange(row) {
-      const { id, delFlag } = row;
-      console.log(1111111111, id, delFlag);
-      try {
-        let res = await changeBankListSwitch({ id, delFlag });
-        this.pageList();
-      } catch (error) {
-        this.pageList();
-      }
-      // this.$message({
-      //   message: row ? "开启成功" : "关闭成功",
-      //   type: "success",
-      // });
-    },
-
     handleResetSearch() {
       this.searchForm = {
         ...cloneDeep(INIT_SEARCH),
@@ -227,25 +191,28 @@ export default {
       this.publicSearchAndChangeSize();
     },
     publicSearchAndChangeSize() {
-      this.searchForm.page = 0;
-      this.initData.page = 0;
-      this.initData.currentPage = 0;
+      this.searchForm.page = 1;
+      // this.initData.page = 0;
+      // this.initData.currentPage = 0;
       this.pageList();
     },
     //查询列表
     async pageList() {
       this.loading = true;
       try {
-        let res = await this.$axios.post(
-          "http://192.168.20.151:9099/pms/c/v1/datamanagement/material/getMaterialPage",
-
+        let res = await this.$ajax.get(
+          `${this.frontUrl}/api/moduleThree/findUsers`,
           {
-            ...this.searchForm,
+            params: {
+              ...this.searchForm,
+            },
           }
         );
         this.loading = false;
-        if (res.code === 0) {
-          this.initData = res?.data;
+
+        if (res.code === 200) {
+          console.log(res);
+          this.tableList = res?.data.list;
           return false;
         }
         this.$message.error(res.message);
@@ -254,9 +221,7 @@ export default {
         console.log("出错了", error);
       }
     },
-    handleAddBankInfo() {
-      this.bankDialogVisibleTitle = "新增银行信息";
-    },
+
     handleAddvoucherInfo(edit) {
       if (edit == "add") {
         this.formData = cleanParams(this.formData);
@@ -282,7 +247,8 @@ export default {
     },
   },
   created() {
-    // this.pageList();
+    console.log(this.frontUrl);
+    this.pageList();
   },
 };
 </script>
@@ -290,7 +256,6 @@ export default {
 <style scoped lang="scss">
 // @import  "../../styles/fms.scss";
 .bank-list {
-
   .h3-title {
     padding: 16px 0;
     font-size: 16px;

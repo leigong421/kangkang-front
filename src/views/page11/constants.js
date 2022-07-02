@@ -3,6 +3,16 @@ export const colConfig = [
     dragLocked: true, //锁住不让拖动
     switchDisabled: true, //禁用关闭
     switch: true, // 是否展示该列
+    attrs: {
+      label: "序号",
+      prop: "name",
+      align: "left",
+    },
+  },
+  {
+    dragLocked: true, //锁住不让拖动
+    switchDisabled: true, //禁用关闭
+    switch: true, // 是否展示该列
     slotHeaderName: "searchBuyCompany", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
     searchKey: "buyCompany", // /表头查询字段,用于配置查询的时候传递给后台的字段

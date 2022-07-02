@@ -13,6 +13,7 @@
       <router-link to="/page7-copy" class="btn">海波原始表格-展开行</router-link>
       <router-link to="/page8" class="btn">大文件上传</router-link> -->
       <router-link to="/page9" class="btn">商品种类</router-link>
+      <router-link to="/page12" class="btn">公司名称</router-link>
       <router-link to="/page10" class="btn">入库数量</router-link>
       <router-link to="/page11" class="btn">出库数量</router-link>
     </div>
@@ -27,6 +28,21 @@
 <script>
 export default {
   name: "App",
+  provide() {
+    return {
+      frontUrl: this.frontUrl,
+    };
+  },
+  computed: {
+    frontUrl() {
+      let frontUrl =
+        process.env.NODE_ENV === "production"
+          ? "http://hubeiyuchen.asia:7001"
+          : "http://127.0.0.1:7001";
+
+      return frontUrl;
+    },
+  },
 };
 </script>
 

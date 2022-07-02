@@ -98,7 +98,6 @@
 
 <script>
 const INIT_SEARCH = {
-  status: 1,
   page: 0,
   size: 10,
 };
@@ -149,7 +148,7 @@ export default {
       loading: false,
 
       bankDialogVisible: false,
-      bankDialogVisibleTitle: "新增银行信息",
+      bankDialogVisibleTitle: "新增入库",
       submitLoading: false,
       formData: {
         code: "",

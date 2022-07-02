@@ -1,7 +1,7 @@
 <!--银行信息列表-->
 <template>
   <div class="fms-view bank-list">
-    <h3 class="h3-title">出库信息</h3>
+    <h3 class="h3-title">公司名称录入</h3>
     <div class="header-operate-area">
       <el-button
         type="primary"
@@ -10,7 +10,6 @@
         @click="handleAddvoucherInfo('add')"
         >新增</el-button
       >
-      <!-- 商品出库信息 -->
     </div>
 
     <div class="fms-content">
@@ -61,11 +60,12 @@
         :isShowLayoutSizes="true"
       />
     </div>
+
     <hb-dialog
       :visible.sync="bankDialogVisible"
       v-if="bankDialogVisible"
       :show-footer="true"
-      width="1200px"
+      width="488px"
       :title="bankDialogVisibleTitle"
       confirmBtnName="保存"
       :onConfirm="handleSubmitForm"
@@ -75,83 +75,11 @@
         :model="formData"
         :rules="bankListRules"
         ref="bank-list"
-        label-position="left"
+        label-width="100px"
+        label-position="top"
       >
-        <el-form-item label="公司名称">
-          <el-select
-            size="mini"
-            v-model="formData.companyName"
-            placeholder="请选择商品"
-          >
-            <el-option label="公司一" value="shanghai"></el-option>
-            <el-option label="公司二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-table
-          :data="formData.goodsList"
-          style="width: 100%"
-          show-summary
-          :summary-method="getSummaries"
-        >
-          <el-table-column prop="name" label="商品名称" width="180">
-            <template slot-scope="scope">
-              <el-select
-                size="mini"
-                v-model="scope.row.name"
-                placeholder="请选择商品"
-              >
-                <el-option label="商品一" value="shanghai"></el-option>
-                <el-option label="商品二" value="beijing"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="num" label="数量">
-            <template slot-scope="scope">
-              <el-input size="mini" v-model.trim="scope.row.num"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="unit" label="单位">
-            <template slot-scope="scope">
-              <el-select
-                size="mini"
-                v-model="scope.row.unit"
-                placeholder="请选择单位"
-              >
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="价格">
-            <template slot-scope="scope">
-              <el-input size="mini" v-model.trim="scope.row.price"></el-input>
-            </template>
-          </el-table-column>
-
-          <el-table-column prop="price" label="单商品总价（元）">
-            <template slot-scope="scope">
-              {{ scope.row.num * scope.row.price }}
-              <!-- <el-input
-                size="mini"
-                v-model.trim="scope.row.totalPrice"
-              ></el-input> -->
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleAddRow"
-                >+</el-button
-              >
-              <el-button
-                size="mini"
-                type="text"
-                :disabled="formData.goodsList.length === 1"
-                @click="handleDelete(scope.$index)"
-                >-</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+        <hb-form-item :formData="formData" :formItemList="formItemList">
+        </hb-form-item>
       </el-form>
     </hb-dialog>
   </div>
@@ -209,30 +137,12 @@ export default {
       loading: false,
 
       bankDialogVisible: false,
-      bankDialogVisibleTitle: "新增出货信息",
+      bankDialogVisibleTitle: "新增银行信息",
       submitLoading: false,
-      formData: {
-        a: 123,
-        goodsList: [{ name: "", num: "", unit: "", price: "", totalPrice: "" }],
-      },
+      formData: {},
     };
   },
   methods: {
-    async handleSwitchChange(row) {
-      const { id, delFlag } = row;
-      console.log(1111111111, id, delFlag);
-      try {
-        let res = await changeBankListSwitch({ id, delFlag });
-        this.pageList();
-      } catch (error) {
-        this.pageList();
-      }
-      // this.$message({
-      //   message: row ? "开启成功" : "关闭成功",
-      //   type: "success",
-      // });
-    },
-
     handleResetSearch() {
       this.searchForm = {
         ...cloneDeep(INIT_SEARCH),
@@ -311,7 +221,7 @@ export default {
     },
     handleAddvoucherInfo(edit) {
       if (edit == "add") {
-        // this.formData = cleanParams(this.formData);
+        this.formData = cleanParams(this.formData);
       }
       this.bankDialogVisible = true;
     },
@@ -332,62 +242,15 @@ export default {
         this.submitLoading = false;
       }
     },
-    handleAddRow() {
-      this.formData.goodsList.push({
-        name: "",
-        num: "",
-        unit: "",
-        price: "",
-        totalPrice: "",
-      });
-    },
-    handleDelete(index) {
-      this.formData.goodsList.splice(index, 1);
-    },
-    getSummaries(param) {
-      const { columns, data } = param;
-      console.log(columns, data, 66666666666);
-      const sums = [];
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = "总价";
-          return;
-        }
-        if (index === 4) {
-          // sums[index] = "总价";
-          sums[index] = data.reduce((prev, curr) => {
-            return prev + curr.num * curr.price;
-          }, 0);
-          console.log(data, 999999999999);
-          // if (!values.every((value) => isNaN(value))) {
-          //   sums[index] = values.reduce((prev, curr) => {
-          //     const value = Number(curr);
-          //     if (!isNaN(value)) {
-          //       return prev + curr;
-          //     } else {
-          //       return prev;
-          //     }
-          //   }, 0);
-          //   sums[index] += " 元";
-          // } else {
-          //   sums[index] = "N/A";
-          // }
-          return sums[index];
-        }
-      });
-
-      return sums;
-    },
   },
   created() {
-    console.log(this.formData);
     // this.pageList();
   },
 };
 </script>
 
 <style scoped lang="scss">
-// @import "../../styles/fms.scss";
+// @import  "../../styles/fms.scss";
 .bank-list {
   .h3-title {
     padding: 16px 0;
