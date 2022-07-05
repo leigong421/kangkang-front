@@ -201,7 +201,7 @@ export default {
       this.loading = true;
       try {
         let res = await this.$ajax.get(
-          `${this.frontUrl}/api/moduleThree/findUsers`,
+          `${this.frontUrl}/api/goods/getList`,
           {
             params: {
               ...this.searchForm,

@@ -20,7 +20,7 @@ instance.interceptors.request.use(
       "Content-Type": "application/json",
     };
     if (config.method === "get") {
-      const paramsLength = Object.keys(config.params).length; //有参数了再加上时间戳
+      const paramsLength = config.params&&Object.keys(config.params).length; //有参数了再加上时间戳
       if (paramsLength) {
         config.params = {
           timeStamp: Date.now(),

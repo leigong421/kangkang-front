@@ -1,4 +1,4 @@
-<!--银行信息列表-->
+<!--出库数量-->
 <template>
   <div class="fms-view bank-list">
     <h3 class="h3-title">公司名称录入</h3>
@@ -16,7 +16,7 @@
       <hb-table
         v-loading="loading"
         :colConfig="colConfig"
-        :tableData="initData.data"
+        :tableData="tableList"
         row-key="id"
         height="calc(100vh - 265px)"
         :selection="true"
@@ -51,7 +51,7 @@
         </template>
       </hb-table>
     </div>
-    <div class="fms-pagination">
+    <!-- <div class="fms-pagination">
       <pagination
         class="hb-pagination"
         :data="initData"
@@ -59,7 +59,7 @@
         @sizeChange="handleSizeChange"
         :isShowLayoutSizes="true"
       />
-    </div>
+    </div> -->
 
     <hb-dialog
       :visible.sync="bankDialogVisible"
@@ -87,7 +87,7 @@
 
 <script>
 const INIT_SEARCH = {
-  page: 0,
+  page: 1,
   size: 10,
 };
 
@@ -111,6 +111,7 @@ export default {
     HbOperate,
   },
   mixins: [tableMixins],
+  inject: ["frontUrl"],
   data() {
     return {
       colConfig,
@@ -128,12 +129,13 @@ export default {
           eventsName: "handleEdit",
         },
       ],
-      //初始化数据
-      initData: {
-        page: 0,
-        size: 10,
-        data: [],
-      },
+      // //初始化数据
+      // initData: {
+      //   page: 0,
+      //   size: 10,
+      //   data: [],
+      // },
+      tableList: undefined,
       loading: false,
 
       bankDialogVisible: false,
@@ -198,16 +200,17 @@ export default {
     async pageList() {
       this.loading = true;
       try {
-        let res = await this.$axios.post(
-          "http://192.168.20.151:9099/pms/c/v1/datamanagement/material/getMaterialPage",
-
+        let res = await this.$ajax.get(
+          `${this.frontUrl}/api/companys/getList`,
           {
-            ...this.searchForm,
+            params: {
+              ...this.searchForm,
+            },
           }
         );
         this.loading = false;
-        if (res.code === 0) {
-          this.initData = res?.data;
+        if (res.code === 200) {
+          this.tableList = res?.data.list;
           return false;
         }
         this.$message.error(res.message);
@@ -244,7 +247,7 @@ export default {
     },
   },
   created() {
-    // this.pageList();
+    this.pageList();
   },
 };
 </script>

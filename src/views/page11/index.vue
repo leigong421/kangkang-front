@@ -64,12 +64,9 @@
     <hb-dialog
       :visible.sync="bankDialogVisible"
       v-if="bankDialogVisible"
-      :show-footer="true"
-      width="1200px"
+      :show-footer="false"
+      width="800px"
       :title="bankDialogVisibleTitle"
-      confirmBtnName="保存"
-      :onConfirm="handleSubmitForm"
-      :canConfirm="submitLoading"
     >
       <el-form
         :model="formData"
@@ -77,81 +74,91 @@
         ref="bank-list"
         label-position="left"
       >
-        <el-form-item label="公司名称">
-          <el-select
-            size="mini"
-            v-model="formData.companyName"
-            placeholder="请选择商品"
+        <div id="single-info">
+          <el-form-item label="公司名称">
+            <el-select
+              size="mini"
+              v-model="formData.companyName"
+              placeholder="请选择公司"
+            >
+              <el-option
+                v-for="(item, index) in companyOptions"
+                :key="index"
+                :label="item.name"
+                :value="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-table
+            :data="formData.goodsList"
+            style="width: 100%"
+            show-summary
+            :summary-method="getSummaries"
           >
-            <el-option label="公司一" value="shanghai"></el-option>
-            <el-option label="公司二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-table
-          :data="formData.goodsList"
-          style="width: 100%"
-          show-summary
-          :summary-method="getSummaries"
-        >
-          <el-table-column prop="name" label="商品名称" width="180">
-            <template slot-scope="scope">
-              <el-select
-                size="mini"
-                v-model="scope.row.name"
-                placeholder="请选择商品"
-              >
-                <el-option label="商品一" value="shanghai"></el-option>
-                <el-option label="商品二" value="beijing"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="num" label="数量">
-            <template slot-scope="scope">
-              <el-input size="mini" v-model.trim="scope.row.num"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="unit" label="单位">
-            <template slot-scope="scope">
-              <el-select
-                size="mini"
-                v-model="scope.row.unit"
-                placeholder="请选择单位"
-              >
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="价格">
-            <template slot-scope="scope">
-              <el-input size="mini" v-model.trim="scope.row.price"></el-input>
-            </template>
-          </el-table-column>
+            <el-table-column prop="name" label="商品名称" width="180">
+              <template slot-scope="scope">
+                <el-select
+                  size="mini"
+                  v-model="scope.row.name"
+                  placeholder="请选择商品"
+                >
+                  <el-option
+                    v-for="(item, index) in goodsOptions"
+                    :key="index"
+                    :label="item.name"
+                    :value="item.name"
+                  ></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column prop="num" label="数量">
+              <template slot-scope="scope">
+                <el-input size="mini" v-model.trim="scope.row.num"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="unit" label="单位">
+              <template slot-scope="scope">
+                {{ getUnit(scope.row.name) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="price" label="价格">
+              <template slot-scope="scope">
+                <el-input size="mini" v-model.trim="scope.row.price"></el-input>
+              </template>
+            </el-table-column>
 
-          <el-table-column prop="price" label="单商品总价（元）">
-            <template slot-scope="scope">
-              {{ scope.row.num * scope.row.price }}
-              <!-- <el-input
-                size="mini"
-                v-model.trim="scope.row.totalPrice"
-              ></el-input> -->
-            </template>
-          </el-table-column>
-          <el-table-column prop="price" label="操作">
-            <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleAddRow"
-                >+</el-button
-              >
-              <el-button
-                size="mini"
-                type="text"
-                :disabled="formData.goodsList.length === 1"
-                @click="handleDelete(scope.$index)"
-                >-</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
+            <el-table-column prop="price" label="单商品总价（元）">
+              <template slot-scope="scope">
+                {{ scope.row.num * scope.row.price }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="price" label="操作">
+              <template slot-scope="scope">
+                <el-button size="mini" type="text" @click="handleAddRow"
+                  >+</el-button
+                >
+                <el-button
+                  size="mini"
+                  type="text"
+                  :disabled="formData.goodsList.length === 1"
+                  @click="handleDelete(scope.$index)"
+                  >-</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <span name="footer" class="dialog-footer">
+          <el-button v-print="'#single-info'" @click="prints">打印</el-button>
+          <el-button @click="handleCancel">取消</el-button>
+          <el-button
+            type="primary"
+            @click="handleSubmitForm"
+            :disabled="submitLoading"
+            >确认</el-button
+          >
+        </span>
       </el-form>
     </hb-dialog>
   </div>
@@ -183,11 +190,13 @@ export default {
     HbOperate,
   },
   mixins: [tableMixins],
+  inject: ["frontUrl"],
   data() {
     return {
       colConfig,
       bankListRules,
-
+      goodsOptions: undefined,
+      companyOptions: undefined,
       formItemList,
       // 搜索条件
       searchForm: {
@@ -212,27 +221,20 @@ export default {
       bankDialogVisibleTitle: "新增出货信息",
       submitLoading: false,
       formData: {
-        a: 123,
+        companyName: "",
         goodsList: [{ name: "", num: "", unit: "", price: "", totalPrice: "" }],
       },
     };
   },
   methods: {
-    async handleSwitchChange(row) {
-      const { id, delFlag } = row;
-      console.log(1111111111, id, delFlag);
-      try {
-        let res = await changeBankListSwitch({ id, delFlag });
-        this.pageList();
-      } catch (error) {
-        this.pageList();
-      }
-      // this.$message({
-      //   message: row ? "开启成功" : "关闭成功",
-      //   type: "success",
-      // });
+    getUnit(name) {
+      console.log(
+        this.goodsOptions.filter((item) => item.name === name)[0],
+        9999999,
+        name
+      );
+      return this.goodsOptions.filter((item) => item.name === name)?.[0]?.unit;
     },
-
     handleResetSearch() {
       this.searchForm = {
         ...cloneDeep(INIT_SEARCH),
@@ -332,6 +334,13 @@ export default {
         this.submitLoading = false;
       }
     },
+    handleCancel() {
+      this.bankDialogVisible = false;
+    },
+    prints() {
+      // var prints = document.getElementById(".single-info");
+      // prints.title = "打印的标题";
+    },
     handleAddRow() {
       this.formData.goodsList.push({
         name: "",
@@ -378,9 +387,19 @@ export default {
 
       return sums;
     },
+
+    async getPublic() {
+      let res1 = this.$ajax.get(`${this.frontUrl}/api/companys/getList`);
+      let res2 = this.$ajax.get(`${this.frontUrl}/api/goods/getList`);
+      let res = await Promise.allSettled([res1, res2]);
+      console.log(res);
+      this.companyOptions = res[0]?.value?.data?.list;
+      this.goodsOptions = res[1]?.value?.data?.list;
+    },
   },
   created() {
-    console.log(this.formData);
+    // console.log(this.formData);
+    this.getPublic();
     // this.pageList();
   },
 };
@@ -399,6 +418,9 @@ export default {
     .add-btn {
       // margin-right: 6px;
     }
+  }
+  .dialog-footer {
+    padding: 12px 0;
   }
 }
 </style>

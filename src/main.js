@@ -4,6 +4,9 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui';
 import axios from 'axios';
+import Print from 'vue-print-nb'
+Vue.use(Print);
+
 
 import ajax from "./ajax/axios";
 Vue.prototype.$ajax = ajax;
