@@ -52,15 +52,17 @@
         </template>
       </hb-table>
     </div>
-    <!-- <div class="fms-pagination">
-      <pagination
-        class="hb-pagination"
-        :data="initData"
-        @changePage="handleChangePage"
-        @sizeChange="handleSizeChange"
-        :isShowLayoutSizes="true"
-      />
-    </div> -->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleChangePage"
+      :current-page="searchForm.page"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="searchForm.size"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
+
     <hb-dialog
       :visible.sync="bankDialogVisible"
       v-if="bankDialogVisible"
@@ -250,6 +252,7 @@ export default {
       // },
       tableList: undefined,
       loading: false,
+      total: 0,
 
       bankDialogVisible: false,
       bankDialogVisibleTitle: "新增出货信息",
@@ -336,6 +339,7 @@ export default {
         if (res.code === 200) {
           console.log(res);
           this.tableList = res?.data.list;
+          this.total = res?.data?.total;
           return false;
         }
         this.$message.error(res.message);
