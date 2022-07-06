@@ -18,7 +18,7 @@ export const colConfig = [
     searchKey: "buyCompany", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "购货单位",
-      prop: "buyCompany",
+      prop: "companyName",
       align: "left",
     },
   },
@@ -31,7 +31,7 @@ export const colConfig = [
     searchKey: "goodName", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "商品名称",
-      prop: "goodName",
+      prop: "goodsName",
       align: "left",
     },
   },
@@ -42,7 +42,7 @@ export const colConfig = [
     searchKey: "address", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "数量",
-      prop: "num",
+      prop: "goodsNum",
       align: "left",
     },
   },
@@ -50,10 +50,10 @@ export const colConfig = [
     switch: true, // 是否展示该列
     slotHeaderName: "searchUnit", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "unit", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "goodsUnit", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "单位",
-      prop: "unit",
+      prop: "goodsUnit",
       align: "left",
     },
   },
@@ -61,10 +61,10 @@ export const colConfig = [
     switch: true, // 是否展示该列
     slotHeaderName: "searchPrice", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "price", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "goodsPrice", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "单价（元）",
-      prop: "price",
+      prop: "goodsPrice",
       align: "left",
     },
   },
@@ -72,10 +72,10 @@ export const colConfig = [
     switch: true, // 是否展示该列
     slotHeaderName: "searchTotal", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "total", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "goodsTotal", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "总计金额",
-      prop: "total",
+      prop: "goodsTotal",
       align: "left",
     },
   },

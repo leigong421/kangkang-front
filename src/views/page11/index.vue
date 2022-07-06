@@ -17,7 +17,7 @@
       <hb-table
         v-loading="loading"
         :colConfig="colConfig"
-        :tableData="initData.data"
+        :tableData="tableList"
         row-key="id"
         height="calc(100vh - 265px)"
         :selection="true"
@@ -52,7 +52,7 @@
         </template>
       </hb-table>
     </div>
-    <div class="fms-pagination">
+    <!-- <div class="fms-pagination">
       <pagination
         class="hb-pagination"
         :data="initData"
@@ -60,7 +60,7 @@
         @sizeChange="handleSizeChange"
         :isShowLayoutSizes="true"
       />
-    </div>
+    </div> -->
     <hb-dialog
       :visible.sync="bankDialogVisible"
       v-if="bankDialogVisible"
@@ -99,7 +99,7 @@
               <template slot-scope="scope">
                 <el-select
                   size="mini"
-                  v-model="scope.row.name"
+                  v-model="scope.row.goodsName"
                   placeholder="请选择商品"
                 >
                   <el-option
@@ -113,23 +113,40 @@
             </el-table-column>
             <el-table-column prop="num" label="数量">
               <template slot-scope="scope">
-                <el-input size="mini" v-model.trim="scope.row.num"></el-input>
+                <el-input
+                  size="mini"
+                  v-model.trim="scope.row.goodsNum"
+                ></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="unit" label="单位">
               <template slot-scope="scope">
-                {{ getUnit(scope.row.name) }}
+                {{ getUnit(scope.row.goodsName) }}
+                <span class="add-data">
+                  {{
+                    (scope.row.goodsUnit = getUnit(scope.row.goodsName))
+                  }}</span
+                >
               </template>
             </el-table-column>
             <el-table-column prop="price" label="价格">
               <template slot-scope="scope">
-                <el-input size="mini" v-model.trim="scope.row.price"></el-input>
+                <el-input
+                  size="mini"
+                  v-model.trim="scope.row.goodsPrice"
+                ></el-input>
               </template>
             </el-table-column>
 
             <el-table-column prop="price" label="单商品总价（元）">
               <template slot-scope="scope">
-                {{ scope.row.num * scope.row.price }}
+                {{ scope.row.goodsNum * scope.row.goodsPrice }}
+                <span class="add-data">
+                  {{
+                    (scope.row.goodsTotal =
+                      scope.row.goodsNum * scope.row.goodsPrice)
+                  }}</span
+                >
               </template>
             </el-table-column>
             <el-table-column prop="price" label="操作">
@@ -166,7 +183,7 @@
 
 <script>
 const INIT_SEARCH = {
-  page: 0,
+  page: 1,
   size: 10,
 };
 
@@ -210,11 +227,12 @@ export default {
         },
       ],
       //初始化数据
-      initData: {
-        page: 0,
-        size: 10,
-        data: [],
-      },
+      // initData: {
+      //   page: 0,
+      //   size: 10,
+      //   data: [],
+      // },
+      tableList: undefined,
       loading: false,
 
       bankDialogVisible: false,
@@ -222,7 +240,7 @@ export default {
       submitLoading: false,
       formData: {
         companyName: "",
-        goodsList: [{ name: "", num: "", unit: "", price: "", totalPrice: "" }],
+        goodsList: [{}],
       },
     };
   },
@@ -290,16 +308,19 @@ export default {
     async pageList() {
       this.loading = true;
       try {
-        let res = await this.$axios.post(
-          "http://192.168.20.151:9099/pms/c/v1/datamanagement/material/getMaterialPage",
-
+        let res = await this.$ajax.get(
+          `${this.frontUrl}/api/saleGoods/getList`,
           {
-            ...this.searchForm,
+            params: {
+              ...this.searchForm,
+            },
           }
         );
         this.loading = false;
-        if (res.code === 0) {
-          this.initData = res?.data;
+
+        if (res.code === 200) {
+          console.log(res);
+          this.tableList = res?.data.list;
           return false;
         }
         this.$message.error(res.message);
@@ -325,7 +346,15 @@ export default {
       if (!validate) return false;
       try {
         this.submitLoading = true;
-        let res = await bankInfoStore(this.formData);
+        let sendData = this.formData.goodsList.map((item) => {
+          return {
+            companyName: this.formData.companyName,
+            ...item,
+          };
+        });
+        let res = await this.$ajax.post(`${this.frontUrl}/api/saleGoods/add`, {
+          goodsList: sendData,
+        });
         this.bankDialogVisible = false;
         this.submitLoading = false;
         this.pageList();
@@ -365,9 +394,9 @@ export default {
         if (index === 4) {
           // sums[index] = "总价";
           sums[index] = data.reduce((prev, curr) => {
-            return prev + curr.num * curr.price;
+            return prev + curr.goodsNum * curr.goodsPrice;
           }, 0);
-          console.log(data, 999999999999);
+          // console.log(data, 999999999999,  sums[index] );
           // if (!values.every((value) => isNaN(value))) {
           //   sums[index] = values.reduce((prev, curr) => {
           //     const value = Number(curr);
@@ -400,7 +429,7 @@ export default {
   created() {
     // console.log(this.formData);
     this.getPublic();
-    // this.pageList();
+    this.pageList();
   },
 };
 </script>
@@ -421,6 +450,9 @@ export default {
   }
   .dialog-footer {
     padding: 12px 0;
+  }
+  .add-data {
+    display: none;
   }
 }
 </style>
