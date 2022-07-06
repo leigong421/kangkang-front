@@ -229,8 +229,7 @@ export default {
     },
     publicSearchAndChangeSize() {
       this.searchForm.page = 0;
-      this.initData.page = 0;
-      this.initData.currentPage = 0;
+
       this.pageList();
     },
     //查询列表
@@ -289,7 +288,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "./fms.scss";
 .bank-list {
   .h3-title {
     padding: 16px 0;

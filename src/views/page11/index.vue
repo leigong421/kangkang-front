@@ -65,7 +65,7 @@
       :visible.sync="bankDialogVisible"
       v-if="bankDialogVisible"
       :show-footer="false"
-      width="800px"
+      width="1200px"
       :title="bankDialogVisibleTitle"
     >
       <el-form
@@ -149,6 +149,20 @@
                 >
               </template>
             </el-table-column>
+            <el-table-column prop="price" label="出货日期">
+              <template slot-scope="scope">
+                <el-date-picker
+                  v-model="scope.row.saleDate"
+                  type="date"
+                  placeholder="选择日期"
+                  size="mini"
+                  style="width: 130px"
+                  format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd"
+                >
+                </el-date-picker>
+              </template>
+            </el-table-column>
             <el-table-column prop="price" label="操作">
               <template slot-scope="scope">
                 <el-button size="mini" type="text" @click="handleAddRow"
@@ -197,6 +211,7 @@ import { colConfig, bankListRules, formItemList } from "./constants.js";
 import tableMixins from "@/mixins/table-mixins.js";
 import { cleanParams } from "@/utils/index.js";
 import { cloneDeep } from "lodash";
+import { format } from "date-fns";
 export default {
   components: {
     HbTable,
@@ -210,6 +225,7 @@ export default {
   inject: ["frontUrl"],
   data() {
     return {
+      format,
       colConfig,
       bankListRules,
       goodsOptions: undefined,
@@ -240,7 +256,7 @@ export default {
       submitLoading: false,
       formData: {
         companyName: "",
-        goodsList: [{}],
+        goodsList: [{ saleDate: format(new Date(), "yyyy-MM-dd") }],
       },
     };
   },
@@ -299,9 +315,8 @@ export default {
       this.publicSearchAndChangeSize();
     },
     publicSearchAndChangeSize() {
-      this.searchForm.page = 0;
-      this.initData.page = 0;
-      this.initData.currentPage = 0;
+      this.searchForm.page = 1;
+
       this.pageList();
     },
     //查询列表
@@ -377,6 +392,7 @@ export default {
         unit: "",
         price: "",
         totalPrice: "",
+        saleDate: format(new Date(), "yyyy-MM-dd"),
       });
     },
     handleDelete(index) {

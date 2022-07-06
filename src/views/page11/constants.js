@@ -10,36 +10,36 @@ export const colConfig = [
     },
   },
   {
-    dragLocked: true, //锁住不让拖动
-    switchDisabled: true, //禁用关闭
+    // dragLocked: true, //锁住不让拖动
+    // switchDisabled: true, //禁用关闭
     switch: true, // 是否展示该列
-    slotHeaderName: "searchBuyCompany", // 表头插槽
+    slotHeaderName: "searchCompanyName", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "buyCompany", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "companyName", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "购货单位",
       prop: "companyName",
       align: "left",
     },
+    statusOptions: [],
   },
   {
-    dragLocked: true, //锁住不让拖动
-    switchDisabled: true, //禁用关闭
     switch: true, // 是否展示该列
     slotHeaderName: "searchGoodName", // 表头插槽
     slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "goodName", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    searchKey: "goodsName", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "商品名称",
       prop: "goodsName",
       align: "left",
     },
+    statusOptions: [],
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchNum", // 表头插槽
-    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "address", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    // slotHeaderName: "searchNum", // 表头插槽
+    // slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
+    // searchKey: "address", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "数量",
       prop: "goodsNum",
@@ -48,9 +48,9 @@ export const colConfig = [
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchUnit", // 表头插槽
-    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "goodsUnit", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    // slotHeaderName: "searchUnit", // 表头插槽
+    // slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
+    // searchKey: "goodsUnit", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "单位",
       prop: "goodsUnit",
@@ -59,9 +59,9 @@ export const colConfig = [
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchPrice", // 表头插槽
-    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "goodsPrice", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    // slotHeaderName: "searchPrice", // 表头插槽
+    // slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
+    // searchKey: "goodsPrice", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "单价（元）",
       prop: "goodsPrice",
@@ -70,9 +70,9 @@ export const colConfig = [
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchTotal", // 表头插槽
-    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "goodsTotal", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    // slotHeaderName: "searchTotal", // 表头插槽
+    // slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
+    // searchKey: "goodsTotal", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "总计金额",
       prop: "goodsTotal",
@@ -81,12 +81,12 @@ export const colConfig = [
   },
   {
     switch: true, // 是否展示该列
-    slotHeaderName: "searchDate", // 表头插槽
-    slotHeaderSearchType: "input", // 表头查询类型,目前支持 input 和select
-    searchKey: "date", // /表头查询字段,用于配置查询的时候传递给后台的字段
+    slotHeaderName: "searchSaleDate", // 表头插槽
+    slotHeaderSearchType: "picker", // 表头查询类型,目前支持 input 和select
+    searchKey: "saleDate", // /表头查询字段,用于配置查询的时候传递给后台的字段
     attrs: {
       label: "购货日期",
-      prop: "date",
+      prop: "saleDate",
       align: "left",
     },
   },
@@ -124,43 +124,3 @@ export const colConfig = [
 //     },
 //   ],
 // };
-
-// export const formItemList = [
-//   {
-//     type: "select",
-//     prop: "buyCompany",
-//     label: "购货单位",
-//     formDataKey: "buyCompany",
-//   },
-//   {
-//     type: "select",
-//     prop: "goodName",
-//     label: "商品名称",
-//     formDataKey: "goodName",
-//   },
-//   {
-//     type: "select",
-//     prop: "unit",
-//     label: "单位",
-//     formDataKey: "unit",
-//   },
-//   {
-//     type: "input",
-//     prop: "num",
-//     label: "数量",
-//     formDataKey: "num",
-//   },
-
-//   {
-//     type: "input",
-//     prop: "price",
-//     label: "单价",
-//     formDataKey: "price",
-//   },
-//   {
-//     type: "input",
-//     prop: "sumPrice",
-//     label: "金额",
-//     formDataKey: "sumPrice",
-//   },
-// ];
